@@ -8,7 +8,7 @@ Source1: sectool.log
 License: GPLv2+
 Group: System/Base
 Requires: gettext coreutils python python-selinux
-BuildRequires: desktop-file-utils gettext intltool asciidoc librpm-devel libselinux-devel
+BuildRequires: desktop-file-utils gettext intltool asciidoc librpm-devel selinux-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %package gui
