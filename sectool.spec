@@ -1,10 +1,11 @@
 Summary: A security audit system and intrusion detection system
 Name: sectool
 Version: 0.9.3
-Release: %mkrel 1
+Release: %mkrel 2
 URL: https://hosted.fedoraproject.org/sectool/wiki/WikiStart
 Source0: %{name}-%{version}.tar.bz2
 Source1: sectool.log
+Patch0:	sectool-0.9.3-rpm5.patch
 License: GPLv2+
 Group: System/Base
 Requires: gettext coreutils python python-selinux
@@ -31,6 +32,7 @@ sectool-gui provides a GTK-based graphical user interface to sectool.
 
 %prep
 %setup -q
+%patch0 -p1 -b .rpm5~
 
 %build
 %make
