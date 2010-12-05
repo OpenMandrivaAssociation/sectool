@@ -1,23 +1,24 @@
-Summary: A security audit system and intrusion detection system
-Name: sectool
-Version: 0.9.3
-Release: %mkrel 2
-URL: https://hosted.fedoraproject.org/sectool/wiki/WikiStart
-Source0: %{name}-%{version}.tar.bz2
-Source1: sectool.log
-Patch0:	sectool-0.9.3-rpm5.patch
-License: GPLv2+
-Group: System/Base
-Requires: gettext coreutils python python-selinux
-BuildRequires: desktop-file-utils gettext intltool asciidoc librpm-devel selinux-devel
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Summary:	A security audit system and intrusion detection system
+Name:		sectool
+Version:	0.9.3
+Release:	%mkrel 2
+URL:		https://hosted.fedoraproject.org/sectool/wiki/WikiStart
+Source0:	%{name}-%{version}.tar.bz2
+Source1:	sectool.log
+Patch0:		sectool-0.9.3-rpm5.patch
+Patch1:		sectool-0.9.3-proper-cppflags-libs-in-makefiel.patch
+License:	GPLv2+
+Group:		System/Base
+Requires:	gettext coreutils python python-selinux
+BuildRequires:	desktop-file-utils gettext intltool asciidoc librpm-devel selinux-devel
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-%package gui
-Summary: GUI for sectool - security audit system and intrusion detection system
-License: GPLv2+
-Group: System/Base
-Requires: sectool = %{version}-%{release}
-Requires: pygtk2 usermode
+%package	gui
+Summary:	GUI for sectool - security audit system and intrusion detection system
+License:	GPLv2+
+Group:		System/Base
+Requires:	sectool = %{version}-%{release}
+Requires:	pygtk2 usermode
 
 %description
 sectool is a security tool that can be used both as a security audit
@@ -27,19 +28,20 @@ levels. Admins can run certain tests, groups or whole security levels.
 The library and the tools are implemented in python and tests are
 language independent.
 
-%description gui
+%description	gui
 sectool-gui provides a GTK-based graphical user interface to sectool.
 
 %prep
 %setup -q
 %patch0 -p1 -b .rpm5~
+%patch1 -p1 -b .cppflags_libs~
 
 %build
-%make
+%make CFLAGS="%{optflags} -ffast-math" LDFLAGS="%{ldflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make DESTDIR=$RPM_BUILD_ROOT install
+%makeinstall_std
 desktop-file-install --delete-original      \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications             \
   --vendor=fedora \
@@ -94,4 +96,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/pixmaps/sectool-min.png
 %{_datadir}/applications/fedora-sectool.desktop
 %{_datadir}/pixmaps/sectool/*.png
-
