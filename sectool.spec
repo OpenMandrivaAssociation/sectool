@@ -1,7 +1,7 @@
 Summary:	A security audit system and intrusion detection system
 Name:		sectool
 Version:	0.9.3
-Release:	%mkrel 3
+Release:	%mkrel 4
 URL:		https://hosted.fedoraproject.org/sectool/wiki/WikiStart
 Source0:	%{name}-%{version}.tar.bz2
 Source1:	sectool.log
