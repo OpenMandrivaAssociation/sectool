@@ -1,7 +1,7 @@
 Summary:	A security audit system and intrusion detection system
 Name:		sectool
 Version:	0.9.3
-Release:	%mkrel 5
+Release:	6
 URL:		https://hosted.fedoraproject.org/sectool/wiki/WikiStart
 Source0:	%{name}-%{version}.tar.bz2
 Source1:	sectool.log
@@ -11,13 +11,12 @@ License:	GPLv2+
 Group:		System/Base
 Requires:	gettext coreutils python python-selinux
 BuildRequires:	desktop-file-utils gettext intltool asciidoc librpm-devel selinux-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %package	gui
 Summary:	GUI for sectool - security audit system and intrusion detection system
 License:	GPLv2+
 Group:		System/Base
-Requires:	sectool = %{version}-%{release}
+Requires:	sectool = %{EVRD}
 Requires:	pygtk2 usermode
 
 %description
@@ -40,7 +39,6 @@ sectool-gui provides a GTK-based graphical user interface to sectool.
 %make CFLAGS="%{optflags} -ffast-math" LDFLAGS="%{ldflags}"
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %makeinstall_std
 desktop-file-install --delete-original      \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications             \
@@ -61,11 +59,7 @@ rm $RPM_BUILD_ROOT/%{_datadir}/sectool/scheduler/selftest.py
 
 %find_lang %{name}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files -f %{name}.lang
-%defattr(-,root,root)
 %doc COPYING AUTHORS README doc/tests_documentation.html
 %config(noreplace) %{_sysconfdir}/sectool/
 %config(noreplace) %{_sysconfdir}/logrotate.d/sectool
@@ -86,7 +80,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files gui
-%defattr(-,root,root)
 %config(noreplace) %{_sysconfdir}/pam.d/sectool-gui
 %config(noreplace) %{_sysconfdir}/security/console.apps/sectool-gui
 %{_bindir}/sectool-gui
