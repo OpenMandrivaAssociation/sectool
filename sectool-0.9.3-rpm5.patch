@@ -1,0 +1,40 @@
+--- sectool-0.9.3/src/filesystem.c.rpm5~	2009-06-02 11:47:16.000000000 +0200
++++ sectool-0.9.3/src/filesystem.c	2010-12-05 19:49:07.850164507 +0100
+@@ -9,6 +9,7 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <stdarg.h>
++#include <stdint.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+@@ -25,9 +26,8 @@
+ #include <fcntl.h>
+ #include <rpmdb.h>
+ #include <rpmts.h>
+-#include <rpmlib.h>
+-#include <rpmfileutil.h>
+ #include <rpmmacro.h>
++#include <rpmrc.h>
+ 
+ #ifdef TEST_SELINUX
+ #include <selinux/selinux.h>
+--- sectool-0.9.3/tests/00_integrity.dsc.rpm5~	2011-02-10 21:53:58.523491000 +0100
++++ sectool-0.9.3/tests/00_integrity.dsc	2011-02-10 21:54:01.789491001 +0100
+@@ -8,14 +8,14 @@ DESCRIPTION="System integrity test. Chec
+ NEED_DATA_DIR=0
+ LEVELS="1 2 3 4 5"
+ GROUPS="sectool filesystem"
+-DEPS="rpmverify basename"
++DEPS="rpm basename"
+ #REQUIRES="disabled_needs_rewrite"
+ AUTHOR="Dan Kopecek <dkopecek@redhat.com>"
+ 
+ [DEFAULT]
+ 
+ CMDPATH="/bin:/sbin:/root/bin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
+-RPMVERIFY="/usr/bin/rpmverify"
++RPMVERIFY="rpm -V"
+ COREPKG="coreutils"
+ DIRECTORY_LIST="/bin
+ 		/sbin

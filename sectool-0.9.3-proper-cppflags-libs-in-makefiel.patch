@@ -1,0 +1,23 @@
+--- sectool-0.9.3/src/Makefile.cppflags_libs~	2008-09-18 11:09:18.000000000 +0200
++++ sectool-0.9.3/src/Makefile	2011-11-02 16:17:44.088617872 +0100
+@@ -1,8 +1,9 @@
+ include ../sectool.mk
+ 
+ CC= gcc
+-CFLAGS= -Wall -O2 -ffast-math -I. -D_FILE_OFFSET_BITS=64 -DTEST_SELINUX -I/usr/include/rpm
+-LDFLAGS= -lrpm -lselinux
++CPPFLAGS = -Wall -I. -D_FILE_OFFSET_BITS=64 -DTEST_SELINUX $(shell pkg-config --cflags rpm)
++CFLAGS= -O2 -ffast-math
++LIBS= $(shell pkg-config --libs rpm libxml-2.0) -lselinux
+ 
+ SRCS_sectool=sectool.c
+ OBJS_sectool=$(SRCS_sectool:.c=.o)
+@@ -12,7 +13,7 @@ SRCS_filesystem=filesystem.c
+ OBJS_filesystem=$(SRCS_filesystem:.c=.o)
+ 
+ $(NAME_filesystem): $(SRCS_sectool) $(SRCS_filesystem)
+-	$(CC) $(CFLAGS) $+ $(LDFLAGS) -o $@
++	$(CC) $(CPPFLAGS) $(CFLAGS) $(LIBS) $+ $(LDFLAGS) -o $@
+ 
+ clean:
+ 	rm -f $(NAME_filesystem) *.o
