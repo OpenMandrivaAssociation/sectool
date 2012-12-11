@@ -1,7 +1,7 @@
 Summary:	A security audit system and intrusion detection system
 Name:		sectool
 Version:	0.9.3
-Release:	6
+Release:	7
 URL:		https://hosted.fedoraproject.org/sectool/wiki/WikiStart
 Source0:	%{name}-%{version}.tar.bz2
 Source1:	sectool.log
@@ -10,7 +10,12 @@ Patch1:		sectool-0.9.3-proper-cppflags-libs-in-makefiel.patch
 License:	GPLv2+
 Group:		System/Base
 Requires:	gettext coreutils python python-selinux
-BuildRequires:	desktop-file-utils gettext intltool asciidoc librpm-devel selinux-devel
+BuildRequires:	desktop-file-utils
+BuildRequires:	gettext
+BuildRequires:	intltool
+BuildRequires:	asciidoc
+BuildRequires:	pkgconfig(rpm)
+BuildRequires:	selinux-devel
 
 %package	gui
 Summary:	GUI for sectool - security audit system and intrusion detection system
@@ -41,21 +46,21 @@ sectool-gui provides a GTK-based graphical user interface to sectool.
 %install
 %makeinstall_std
 desktop-file-install --delete-original      \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications             \
-  --vendor=fedora \
-   $RPM_BUILD_ROOT%{_datadir}/applications/sectool.desktop
+  --dir %{buildroot}%{_datadir}/applications             \
+  --vendor=rosa \
+   %{buildroot}%{_datadir}/applications/sectool.desktop
 
 #logrotate
-install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
-install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/sectool
+install -d -m 755 %{buildroot}%{_sysconfdir}/logrotate.d
+install -p -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/sectool
 #adjust paths in sectool.conf
-sed -i 's,DSC_DIR=\(.*\),DSC_DIR=%{_sysconfdir}/sectool/tests,' $RPM_BUILD_ROOT%{_sysconfdir}/sectool/sectool.conf
-sed -i 's,TESTS_DIRS=\(.*\),TESTS_DIRS=%{_datadir}/sectool/tests,' $RPM_BUILD_ROOT%{_sysconfdir}/sectool/sectool.conf
-sed -i 's,TDATA_DIR_BASE=\(.*\),TDATA_DIR_BASE=%{_localstatedir}/lib/sectool,' $RPM_BUILD_ROOT%{_sysconfdir}/sectool/sectool.conf
+sed -i 's,DSC_DIR=\(.*\),DSC_DIR=%{_sysconfdir}/sectool/tests,' %{buildroot}%{_sysconfdir}/sectool/sectool.conf
+sed -i 's,TESTS_DIRS=\(.*\),TESTS_DIRS=%{_datadir}/sectool/tests,' %{buildroot}%{_sysconfdir}/sectool/sectool.conf
+sed -i 's,TDATA_DIR_BASE=\(.*\),TDATA_DIR_BASE=%{_localstatedir}/lib/sectool,' %{buildroot}%{_sysconfdir}/sectool/sectool.conf
 #adjust icons path in guiOutput.py
-sed -i 's,__ico_path = \(.*\),__ico_path = "%{_datadir}/pixmaps/sectool/",' $RPM_BUILD_ROOT%{_datadir}/sectool/guiOutput.py
+sed -i 's,__ico_path = \(.*\),__ico_path = "%{_datadir}/pixmaps/sectool/",' %{buildroot}%{_datadir}/sectool/guiOutput.py
 #this file is just for development
-rm $RPM_BUILD_ROOT/%{_datadir}/sectool/scheduler/selftest.py
+rm %{buildroot}%{_datadir}/sectool/scheduler/selftest.py
 
 %find_lang %{name}
 
@@ -87,5 +92,7 @@ rm $RPM_BUILD_ROOT/%{_datadir}/sectool/scheduler/selftest.py
 %{_datadir}/sectool/sectool-gui.py*
 %{_datadir}/pixmaps/sectool-gui.png
 %{_datadir}/pixmaps/sectool-min.png
-%{_datadir}/applications/fedora-sectool.desktop
+%{_datadir}/applications/*-sectool.desktop
 %{_datadir}/pixmaps/sectool/*.png
+
+
